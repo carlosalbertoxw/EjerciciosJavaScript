@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>If Else</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <div id="text"></div>
+        <script>
+            var greeting;
+            var time = new Date().getHours();
+            if (time < 10) {
+                greeting = "Good morning";
+            } else if (time < 20) {
+                greeting = "Good day";
+            } else {
+                greeting = "Good evening";
+            }
+            document.getElementById("text").innerHTML = greeting;
+        </script>
+    </body>
+</html>

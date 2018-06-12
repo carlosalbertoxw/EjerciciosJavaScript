@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Formatear texto</title>
+        <style type="text/css">
+            div {
+                margin: 0 auto;
+                margin-top: 150px;
+                width: 260px;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <label>Texto</label> 
+            <input type="text" onblur="format(this);" autofocus>
+        </div>
+        <script type="text/javascript">
+            function format(obj) {
+                var text = obj.value.trim();
+                text = ucWords(text);
+                obj.value = text;
+            }
+
+            function ucWords(string) {
+                var reservedWords = ["de", "la", "los", "el", "del", "y", "para", "sin", "e", "las"];
+                var returnString = "";
+                var arrayWords = string.split(" ");
+                if (arrayWords.length !== 1) {
+                    for (var i = 0; i < arrayWords.length; i++) {
+                        var flag = false;
+                        for (var y = 0; y < reservedWords.length; y++) {
+                            if (reservedWords[y] === arrayWords[i].toLowerCase()) {
+                                if (i !== 0) {
+                                    flag = true;
+                                }
+                            }
+                        }
+                        if (flag) {
+                            returnString = returnString + lc(arrayWords[i]) + " ";
+                        } else {
+                            if (arrayWords[i] !== '') {
+                                returnString = returnString + ucFirst(arrayWords[i]) + " ";
+                            }
+                        }
+
+                    }
+                } else {
+                    returnString = ucFirst(arrayWords[i]);
+                }
+                return returnString.trim();
+            }
+
+            function ucFirst(string) {
+                return string.substr(0, 1).toUpperCase()
+                        + string.substr(1, string.length).toLowerCase();
+            }
+
+            function lc(string) {
+                return string.toLowerCase();
+            }
+        </script>
+    </body>
+</html>

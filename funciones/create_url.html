@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Crear url</title>
+        <style type="text/css">
+            div {
+                margin: 0 auto;
+                margin-top: 150px;
+                width: 440px;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <label>Titulo</label> 
+            <input type="text" onblur="write_url(this, 'url');" autofocus> 
+            <label>URL</label>
+            <input type="text" id="url">
+        </div>
+        <script type="text/javascript">
+            function write_url(from, to) {
+                var text = from.value.trim();
+                text = normalize(text);
+                document.getElementById(to).value = text;
+            }
+
+            var normalize = (function () {
+                var from = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç", to = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc", mapping = {};
+
+                for (var i = 0, j = from.length; i < j; i++)
+                    mapping[from.charAt(i)] = to.charAt(i);
+
+                return function (str) {
+                    var ret = [];
+                    for (var i = 0, j = str.length; i < j; i++) {
+                        var c = str.charAt(i);
+                        if (mapping.hasOwnProperty(str.charAt(i)))
+                            ret.push(mapping[c]);
+                        else
+                            ret.push(c);
+                    }
+                    return ret.join('').replace(/[^-A-Za-z0-9]+/g, '-')
+                            .toLowerCase();
+                };
+            })();
+        </script>
+    </body>
+</html>

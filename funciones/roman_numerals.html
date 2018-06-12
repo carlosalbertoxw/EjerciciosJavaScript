@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Converción de numero entero a romano</title>
+        <style type="text/css">
+            div {
+                margin: 0 auto;
+                margin-top: 150px;
+                width: 260px;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <label for="decimal">Decimal:</label> <br> 
+            <input autofocus="" type="text" id="decimal" maxlength="4" style="width: 100%" /> <br>
+            <button onclick="convert();" style="width: 100%">Convertir</button><br> 
+            <label>Romano:</label> <br>
+            <textarea id="roman" readonly style="width: 100%" rows="4"></textarea>
+        </div>
+        <script>
+            function DecimalToRoman(n) {
+                var returnstring = '';
+                var table = [['M', 1000], ['CM', 900], ['D', 500],
+                    ['CD', 400], ['C', 100], ['XC', 90], ['L', 50],
+                    ['XL', 40], ['X', 10], ['IX', 9], ['V', 5],
+                    ['IV', 4], ['I', 1]];
+                for (var i = 0; i < table.length; i++) {
+                    while (n - table[i][1] >= 0) {
+                        n -= table[i][1];
+                        returnstring += table[i][0];
+                    }
+                }
+                return returnstring;
+            }
+
+            function convert() {
+                var n = document.getElementById("decimal").value.trim();
+                if (n <= 3999) {
+                    var r = DecimalToRoman(n);
+                    document.getElementById("roman").innerHTML = r;
+                } else {
+                    document.getElementById("roman").innerHTML = 'Solo se puede convertir hasta el número 3999 o el texto ingresado no es numérico';
+                }
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Image preview</title>
+		<style>
+		fieldset{
+			margin-bottom:10px;
+			width:720px;
+			background:lightyellow;	
+			border:10px solid yellow;
+		}
+		label{
+			text-align:right;
+			vertical-align:top;
+			width:180px;
+			display:inline-block
+		}
+		img{
+			width:200px;
+			heigh:200px
+		}
+		</style>
+	</head>
+	<body>
+		<h1>Image preview</h1>
+		<form>
+			<fieldset>
+				<legend>Image</legend>
+				<label for="image">Your image:</label>
+				<input type="file" name="image" id="image" required />
+				<br/>
+				<label for="preview">Image preview:</label>
+				<img id="preview"></img>
+			</fieldset>
+		</form>
+		<script>
+		window.onload = function() {
+			var files = document.querySelectorAll("input[type=file]");
+			files[0].addEventListener("change", function(e) {
+				if(this.files && this.files[0]) {
+					var reader = new FileReader();
+					reader.onload = function(e) { document.getElementById("preview").setAttribute("src", e.target.result); }
+					reader.readAsDataURL(this.files[0]);
+				}
+			});
+		}
+		</script>
+	</body>
+</html>
