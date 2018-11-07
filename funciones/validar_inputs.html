@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+		Ver en consola web
+        <script>
+			console.log("username:"+val_input('prueba','username',25,false));
+			console.log("numeric:"+val_input('24680','numeric',10,false));
+			console.log("numeric_decimal:"+val_input('24680.2','numeric_decimal',10,false));
+			console.log("url:"+val_input('https://github.com/carlosalbertoxw','url',500,false));
+			console.log("email:"+val_input('prueba@prueba.prb','email',50,false));
+		
+			function val_input(text, type, length, empty) {
+				return t_l_e(text, type, length, empty);
+			}
+			
+			function t_l_e(text, type, length, empty) {
+				if (text===null || text===undefined) {
+					return false;
+				}
+				if (empty === false && text.length === 0) {
+					return false;
+				} else
+				if (empty === false && text.length > 0) {
+					return t(text, type, length);
+				} else
+				if (empty === true && text.length > 0) {
+					return t(text, type, length);
+				} else {
+					return empty === true && text.length == 0;
+				}
+			}
+
+			function t(text, type, length) {
+				var pattern='';
+				var flag;
+				switch (type) {
+					case 'username':
+						pattern = '^([0-9a-zA-Z-])*$';
+						flag = val(text, pattern);
+						break;
+					case 'url':
+						pattern = '^(http|https)\\://[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,3}(/\\S*)?$';
+						flag = val(text, pattern);
+						break;
+					case 'numeric':
+						pattern = '^([0-9])*$';
+						flag = val(text, pattern);
+						break;
+					case 'numeric_decimal':
+						pattern = '^[0-9,]*\\.?[0-9]*$';
+						flag = val(text, pattern);
+						break;
+					case 'email':
+						pattern = '^[^@\\s]+@[^@\\.\\s]+(\\.[^@\\.\\s]+)+$';
+						flag = val(text, pattern);
+						break;
+					case 'string':
+						flag = true;
+						break;
+					default:
+						flag = false;
+						break;
+				}
+				return l(text, flag, length);
+			}
+
+			function l(text, flag, length) {
+				return flag && text.length <= length;
+			}
+
+			function val(text, pattern) {
+				var p = new RegExp(pattern, ["i"]);
+				var m = p.exec(text);
+				if (m !== null) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+        </script>
+    </body>
+</html>
