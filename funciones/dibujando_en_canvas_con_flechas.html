@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>Dibujando en canvas con flechas</title>
+		<style>
+			html,body{
+				margin: 0px;
+				padding: 0px;
+				width: 100%;
+				height: 100%;
+			}
+			canvas{
+				border: 2px solid #000;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="area_dibujo"></canvas>
+		<div>Mueve las flechas del teclado para dibujar</div>
+		<script>
+			var teclas = {
+				UP: 38,
+				DOWN: 40,
+				LEFT: 37,
+				RIGHT: 39
+			};
+
+			var ancho = document.body.clientWidth;
+			var alto = document.body.clientHeight;
+			ancho = ancho-4;
+			alto = alto-50;
+			var etiqueta = document.getElementById("area_dibujo");
+			etiqueta.setAttribute("width",ancho);
+			etiqueta.setAttribute("height",alto);
+			var lienzo = etiqueta.getContext("2d");
+			var x = ancho/2;
+			var y = alto/2;
+			document.addEventListener("keydown", accionFlechas);
+
+			dibujar("red", x, y, x+1, y+1, lienzo);
+
+			function dibujar(color, xinicial, yinicial, xfinal, yfinal, lienzo){
+				lienzo.beginPath();
+				lienzo.strokeStyle = color;
+				lienzo.lineWidth = 2;
+				lienzo.moveTo(xinicial, yinicial);
+				lienzo.lineTo(xfinal, yfinal);
+				lienzo.stroke();
+				lienzo.closePath();
+			}
+
+			function accionFlechas(evento){
+				var color = "red";
+				var movimiento = 5;
+				switch(evento.keyCode){
+					case teclas.UP:
+						dibujar(color, x, y, x, y - movimiento, lienzo);
+						y = y - movimiento;
+					break;
+					case teclas.DOWN:
+						dibujar(color, x, y, x, y + movimiento, lienzo);
+						y = y + movimiento;
+					break;
+					case teclas.LEFT:
+						dibujar(color, x, y, x - movimiento, y, lienzo);
+						x = x - movimiento;
+					break;
+					case teclas.RIGHT:
+						dibujar(color, x, y, x + movimiento, y, lienzo);
+						x = x + movimiento;
+					break;
+				}
+			}
+		</script>
+	</body>
+</html>
