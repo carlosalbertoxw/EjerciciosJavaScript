@@ -6,78 +6,92 @@
     <body>
 		Ver en consola web
         <script>
-			console.log("username:"+val_input('prueba','username',25,false));
-			console.log("numeric:"+val_input('24680','numeric',10,false));
-			console.log("numeric_decimal:"+val_input('24680.2','numeric_decimal',10,false));
-			console.log("url:"+val_input('https://github.com/carlosalbertoxw','url',500,false));
-			console.log("email:"+val_input('prueba@prueba.prb','email',50,false));
+			console.log("username:"+val_input('prueba','uri',25,false,'username'));
+			console.log("numeric:"+val_input('24680','numeric',10,false,'numeric'));
+			console.log("numeric_decimal:"+val_input('24680.2','numeric_decimal',10,false,'numeric_decimal'));
+			console.log("url:"+val_input('https://github.com/carlosalbertoxw','url',500,false,'url'));
+			console.log("email:"+val_input('prueba@prueba.prb','email',50,false,'email'));
 		
-			function val_input(text, type, length, empty) {
-				return t_l_e(text, type, length, empty);
+			function val_input(text, type, length, empty, field) {
+				return t_l_e(text, type, length, empty, field);
 			}
-			
-			function t_l_e(text, type, length, empty) {
-				if (text===null || text===undefined) {
-					return false;
+
+			function t_l_e(text, type, length, empty, field) {
+				if (text === null || text === undefined) {
+					return 'El campo "' + field + '" no puede ser nulo';
 				}
 				if (empty === false && text.length === 0) {
-					return false;
+					return 'El campo "' + field + '" no puede estar vacio';
 				} else
 				if (empty === false && text.length > 0) {
-					return t(text, type, length);
+					return t(text, type, length, field);
 				} else
 				if (empty === true && text.length > 0) {
-					return t(text, type, length);
+					return t(text, type, length, field);
 				} else {
-					return empty === true && text.length == 0;
+					return '';
 				}
 			}
 
-			function t(text, type, length) {
-				var pattern='';
-				var flag;
+			function t(text, type, length, field) {
+				var pattern = '';
+				var message = '';
+				var response;
 				switch (type) {
-					case 'username':
+					case 'uri':
 						pattern = '^([0-9a-zA-Z-])*$';
-						flag = val(text, pattern);
+						message = 'El campo "' + field + '" solo acepta los siguientes caracteres 0-9 a-z A-Z - ';
+						response = val(text, pattern, message);
 						break;
 					case 'url':
 						pattern = '^(http|https)\\://[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,3}(/\\S*)?$';
-						flag = val(text, pattern);
+						message = 'Ingresa una URL valida en el campo "' + field + '"';
+						response = val(text, pattern, message);
 						break;
 					case 'numeric':
 						pattern = '^([0-9])*$';
-						flag = val(text, pattern);
+						message = 'Ingresa un valor numérico valido en el campo "' + field + '"';
+						response = val(text, pattern, message);
 						break;
 					case 'numeric_decimal':
 						pattern = '^[0-9,]*\\.?[0-9]*$';
-						flag = val(text, pattern);
+						message = 'Ingresa un valor decimal valido en el campo "' + field + '"';
+						response = val(text, pattern, message);
 						break;
 					case 'email':
 						pattern = '^[^@\\s]+@[^@\\.\\s]+(\\.[^@\\.\\s]+)+$';
-						flag = val(text, pattern);
+						message = 'Ingresa un correo electrónico valido en el campo "' + field + '"';
+						response = val(text, pattern, message);
 						break;
 					case 'string':
-						flag = true;
+						response = '';
 						break;
 					default:
-						flag = false;
+						response = 'Error al validar el tipo de dato del campo "' + field + '"';
 						break;
 				}
-				return l(text, flag, length);
+				return l(text, response, length, field);
 			}
 
-			function l(text, flag, length) {
-				return flag && text.length <= length;
+			function l(text, response, length, field) {
+				if(response === ''){
+					if (text.length <= length) {
+						return '';
+					} else {
+						return 'La longitud del campo "' + field + '" no puede ser mayor a ' + length;
+					}
+				}else{
+					return response;
+				}
 			}
 
-			function val(text, pattern) {
+			function val(text, pattern, message) {
 				var p = new RegExp(pattern, ["i"]);
 				var m = p.exec(text);
 				if (m !== null) {
-					return true;
+					return '';
 				} else {
-					return false;
+					return message;
 				}
 			}
         </script>
