@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<button onclick="init()">Click me</body>
+</html>
+<script>
+	function init(){
+		if(!navigator.geolocation){
+			alert("Sorry but your browser does not have geolocation support.");
+		}else{
+			navigator
+			.geolocation
+			.getCurrentPosition(
+				onSuccessGeolocating,
+				onErrorGeolocating,
+				{
+					timeout:10000
+				}
+			);
+		}
+	}
+	
+	function onSuccessGeolocating(position){
+		var message = position.coords.latitude +","+ position.coords.longitude;
+		alert(message);
+	}
+	
+	function onErrorGeolocating(error){
+		switch(error.code){
+			case error.PERMISSION_DENIED:
+				alert('ERROR: User denied access to track physical position!');
+			break;
+			case error.POSITION_UNAVAILABLE:
+				alert("ERROR: There is a problem getting the position of the device!");
+			break;
+			case error.TIMEOUT:
+				alert("ERROR: The application timed out trying to get the position of the device!");
+			break;
+			default:
+				alert("ERROR: Unknown problem!");
+			break;
+		}
+	}
+</script>
