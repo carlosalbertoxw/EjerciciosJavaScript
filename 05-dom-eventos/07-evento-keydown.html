@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evento keydown</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #222; }
+        h1 { font-size: 1.3rem; }
+        p.intro { color: #555; }
+        #tecla { margin-top: 1rem; font-size: 2rem; text-align: center; padding: 1.5rem; background: #f4f4f4; border-radius: 6px; }
+        pre { background: #f4f4f4; padding: .75rem 1rem; border-radius: 6px; }
+    </style>
+</head>
+<body>
+    <h1>Evento keydown</h1>
+    <p class="intro">Pulsa cualquier tecla. El objeto <code>event</code> nos dice qué tecla fue. Fíjate en <code>key</code> y <code>code</code>.</p>
+    <div id="tecla">Pulsa una tecla…</div>
+    <pre id="detalle"></pre>
+
+    <script>
+        const tecla = document.querySelector("#tecla");
+        const detalle = document.querySelector("#detalle");
+
+        // Escuchamos en todo el documento
+        document.addEventListener("keydown", (evento) => {
+            tecla.textContent = evento.key === " " ? "Espacio" : evento.key;
+            detalle.textContent =
+                `event.key   -> ${evento.key}\n` +
+                `event.code  -> ${evento.code}\n` +
+                `event.shift -> ${evento.shiftKey}\n` +
+                `event.ctrl  -> ${evento.ctrlKey}`;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear y borrar elementos</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #222; }
+        h1 { font-size: 1.3rem; }
+        p.intro { color: #555; }
+        button { font-size: 1rem; padding: .5rem 1rem; border: none; border-radius: 6px; background: #2563eb; color: #fff; cursor: pointer; }
+        ul { padding-left: 1.2rem; }
+        li { cursor: pointer; }
+        li:hover { text-decoration: line-through; color: #b91c1c; }
+    </style>
+</head>
+<body>
+    <h1>Crear y borrar elementos</h1>
+    <p class="intro">Creamos nodos con <code>createElement</code> y los añadimos con <code>append</code>. Haz clic en un elemento de la lista para borrarlo con <code>remove</code>.</p>
+    <button id="agregar">Agregar elemento</button>
+    <ul id="lista"></ul>
+
+    <script>
+        const lista = document.querySelector("#lista");
+        const boton = document.querySelector("#agregar");
+        let contador = 0;
+
+        boton.addEventListener("click", () => {
+            contador++;
+            const item = document.createElement("li");   // crear
+            item.textContent = `Elemento ${contador}`;
+            item.addEventListener("click", () => item.remove()); // borrar al hacer clic
+            lista.append(item);                            // insertar
+        });
+    </script>
+</body>
+</html>

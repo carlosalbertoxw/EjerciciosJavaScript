@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear una URL amigable (slug)</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #222; }
+        h1 { font-size: 1.3rem; }
+        p.intro { color: #555; }
+        label { display: block; margin-top: .75rem; font-weight: 600; }
+        input { font-size: 1rem; padding: .5rem; width: 100%; box-sizing: border-box; }
+    </style>
+</head>
+<body>
+    <h1>Generar un "slug" para URL</h1>
+    <p class="intro">Convierte un título en texto apto para una URL: quita acentos, pasa a minúsculas y reemplaza los espacios por guiones. Escribe un título y sal del campo.</p>
+
+    <label for="titulo">Título</label>
+    <input type="text" id="titulo" placeholder="ej: Mi Primer Artículo de Programación" autofocus>
+    <label for="url">URL generada</label>
+    <input type="text" id="url" readonly>
+
+    <script>
+        function crearSlug(texto) {
+            return texto
+                .normalize("NFD")                    // separa cada letra de su acento
+                .replace(/[̀-ͯ]/g, "")     // elimina los acentos (marcas combinantes)
+                .toLowerCase()
+                .trim()
+                .replace(/[^a-z0-9]+/g, "-")         // todo lo no alfanumérico -> guion
+                .replace(/^-+|-+$/g, "");            // quita guiones sobrantes al inicio/fin
+        }
+
+        const titulo = document.querySelector("#titulo");
+        const url = document.querySelector("#url");
+        titulo.addEventListener("blur", () => {
+            url.value = crearSlug(titulo.value);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario submit</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #222; }
+        h1 { font-size: 1.3rem; }
+        p.intro { color: #555; }
+        input, button { font-size: 1rem; padding: .5rem; }
+        button { border: none; border-radius: 6px; background: #2563eb; color: #fff; cursor: pointer; }
+        #saludo { margin-top: 1rem; font-size: 1.2rem; }
+    </style>
+</head>
+<body>
+    <h1>Evento submit de un formulario</h1>
+    <p class="intro">Al enviar un formulario, el navegador recarga la página por defecto. Con <code>event.preventDefault()</code> lo evitamos y procesamos los datos con JavaScript.</p>
+
+    <form id="formulario">
+        <input type="text" id="nombre" placeholder="Tu nombre" required>
+        <button type="submit">Enviar</button>
+    </form>
+    <div id="saludo"></div>
+
+    <script>
+        const formulario = document.querySelector("#formulario");
+        const saludo = document.querySelector("#saludo");
+
+        formulario.addEventListener("submit", (evento) => {
+            evento.preventDefault(); // evita que la página se recargue
+            const nombre = document.querySelector("#nombre").value;
+            saludo.textContent = `¡Hola, ${nombre}! El formulario no recargó la página.`;
+        });
+    </script>
+</body>
+</html>

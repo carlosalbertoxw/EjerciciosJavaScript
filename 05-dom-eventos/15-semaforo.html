@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semáforo</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #222; text-align: center; }
+        h1 { font-size: 1.3rem; }
+        p.intro { color: #555; }
+        .semaforo { display: inline-flex; flex-direction: column; gap: 1rem; padding: 1rem; background: #333; border-radius: 12px; }
+        .luz { width: 80px; height: 80px; border-radius: 50%; background: #555; opacity: .25; transition: opacity .2s; }
+        .luz.roja { background: #ef4444; }
+        .luz.amarilla { background: #f59e0b; }
+        .luz.verde { background: #22c55e; }
+        .luz.activa { opacity: 1; }
+    </style>
+</head>
+<body>
+    <h1>Semáforo automático</h1>
+    <p class="intro">Usa <code>setInterval</code> para ejecutar código cada cierto tiempo. Aquí cambia la luz encendida en ciclo.</p>
+
+    <div class="semaforo">
+        <div class="luz roja"></div>
+        <div class="luz amarilla"></div>
+        <div class="luz verde"></div>
+    </div>
+
+    <script>
+        const luces = document.querySelectorAll(".luz");
+        const secuencia = [0, 1, 2, 1]; // roja, amarilla, verde, amarilla...
+        let paso = 0;
+
+        function actualizar() {
+            luces.forEach(luz => luz.classList.remove("activa"));
+            luces[secuencia[paso]].classList.add("activa");
+            paso = (paso + 1) % secuencia.length; // vuelve a 0 al llegar al final
+        }
+
+        actualizar();                 // primer estado inmediato
+        setInterval(actualizar, 1000); // y luego cada segundo
+    </script>
+</body>
+</html>

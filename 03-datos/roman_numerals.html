@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversión de decimal a romano</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #222; }
+        h1 { font-size: 1.3rem; }
+        p.intro { color: #555; }
+        label { display: block; margin-top: .5rem; font-weight: 600; }
+        input, button { font-size: 1rem; padding: .4rem; width: 100%; box-sizing: border-box; margin-top: .25rem; }
+        button { background: #2563eb; color: #fff; border: none; border-radius: 6px; cursor: pointer; }
+        #resultado { margin-top: 1rem; font-size: 1.5rem; text-align: center; min-height: 1.5em; }
+    </style>
+</head>
+<body>
+    <h1>Decimal a número romano</h1>
+    <p class="intro">Ejemplo de lógica pura: un algoritmo que recorre una tabla de valores para construir el resultado. Escribe un número del 1 al 3999.</p>
+
+    <label for="decimal">Número decimal</label>
+    <input type="number" id="decimal" min="1" max="3999" autofocus>
+    <button id="convertir">Convertir</button>
+    <div id="resultado"></div>
+
+    <script>
+        function decimalARomano(numero) {
+            const tabla = [
+                ["M", 1000], ["CM", 900], ["D", 500], ["CD", 400],
+                ["C", 100], ["XC", 90], ["L", 50], ["XL", 40],
+                ["X", 10], ["IX", 9], ["V", 5], ["IV", 4], ["I", 1]
+            ];
+            let resultado = "";
+            for (const [simbolo, valor] of tabla) {
+                while (numero >= valor) {
+                    resultado += simbolo;
+                    numero -= valor;
+                }
+            }
+            return resultado;
+        }
+
+        const resultado = document.getElementById("resultado");
+        document.getElementById("convertir").addEventListener("click", () => {
+            const numero = parseInt(document.getElementById("decimal").value, 10);
+            if (Number.isInteger(numero) && numero >= 1 && numero <= 3999) {
+                resultado.textContent = decimalARomano(numero);
+            } else {
+                resultado.textContent = "Ingresa un número entero entre 1 y 3999";
+            }
+        });
+    </script>
+</body>
+</html>

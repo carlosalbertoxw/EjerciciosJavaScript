@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dibujar en canvas con el ratón</title>
+    <style>
+        body { font-family: system-ui, sans-serif; margin: 1rem; color: #222; }
+        h1 { font-size: 1.3rem; }
+        p.intro { color: #555; }
+        canvas { border: 2px solid #333; border-radius: 6px; display: block; margin-top: 1rem; cursor: crosshair; touch-action: none; }
+    </style>
+</head>
+<body>
+    <h1>Dibujar en un canvas con el ratón</h1>
+    <p class="intro">Mantén pulsado el botón del ratón y arrastra para dibujar. Combina el elemento <code>&lt;canvas&gt;</code> con los eventos de ratón.</p>
+    <canvas id="lienzo" width="600" height="400"></canvas>
+
+    <script>
+        const canvas = document.querySelector("#lienzo");
+        const ctx = canvas.getContext("2d");
+        ctx.lineWidth = 2;
+        ctx.lineCap = "round";
+        ctx.strokeStyle = "#111";
+
+        let dibujando = false;
+
+        // Convierte la posición del ratón a coordenadas dentro del canvas
+        function posicion(evento) {
+            const r = canvas.getBoundingClientRect();
+            return { x: evento.clientX - r.left, y: evento.clientY - r.top };
+        }
+
+        canvas.addEventListener("mousedown", (e) => {
+            dibujando = true;
+            const { x, y } = posicion(e);
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        });
+
+        canvas.addEventListener("mousemove", (e) => {
+            if (!dibujando) return;
+            const { x, y } = posicion(e);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+        });
+
+        // Al soltar (o salir del canvas) dejamos de dibujar
+        canvas.addEventListener("mouseup", () => dibujando = false);
+        canvas.addEventListener("mouseleave", () => dibujando = false);
+    </script>
+</body>
+</html>

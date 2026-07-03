@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dibujar en canvas con las flechas</title>
+    <style>
+        body { font-family: system-ui, sans-serif; margin: 1rem; color: #222; }
+        h1 { font-size: 1.3rem; }
+        p.intro { color: #555; }
+        canvas { border: 2px solid #333; border-radius: 6px; display: block; margin-top: 1rem; }
+    </style>
+</head>
+<body>
+    <h1>Dibujar con las flechas del teclado</h1>
+    <p class="intro">Usa las flechas ↑ ↓ ← → para mover el lápiz y dejar un trazo. Combina el canvas con el evento <code>keydown</code>.</p>
+    <canvas id="lienzo" width="600" height="400"></canvas>
+
+    <script>
+        const canvas = document.querySelector("#lienzo");
+        const ctx = canvas.getContext("2d");
+        ctx.strokeStyle = "#dc2626";
+        ctx.lineWidth = 2;
+
+        // Empezamos en el centro
+        let x = canvas.width / 2;
+        let y = canvas.height / 2;
+        const paso = 8;
+
+        function mover(dx, dy) {
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            x += dx;
+            y += dy;
+            ctx.lineTo(x, y);
+            ctx.stroke();
+        }
+
+        document.addEventListener("keydown", (evento) => {
+            switch (evento.key) {
+                case "ArrowUp":    mover(0, -paso); break;
+                case "ArrowDown":  mover(0, paso);  break;
+                case "ArrowLeft":  mover(-paso, 0); break;
+                case "ArrowRight": mover(paso, 0);  break;
+                default: return;
+            }
+            evento.preventDefault(); // evita que la página haga scroll con las flechas
+        });
+    </script>
+</body>
+</html>

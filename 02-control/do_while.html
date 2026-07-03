@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>do / while</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #222; }
+        h1 { font-size: 1.3rem; }
+        p.intro { color: #555; }
+        pre { background: #f4f4f4; padding: .75rem 1rem; border-radius: 6px; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <h1>Bucle do / while</h1>
+    <p class="intro">Igual que <code>while</code>, pero la condición se evalúa al final: el bloque se ejecuta al menos una vez.</p>
+    <pre id="salida"></pre>
+    <script>
+        let lineas = "";
+        let i = 6;
+
+        do {
+            lineas += `i = ${i}\n`;
+            i++;
+        } while (i <= 15);
+
+        document.getElementById("salida").textContent = lineas;
+    </script>
+</body>
+</html>

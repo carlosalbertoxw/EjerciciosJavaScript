@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pestañas (tabs)</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #222; }
+        h1 { font-size: 1.3rem; }
+        p.intro { color: #555; }
+        .tabs { display: flex; gap: .25rem; border-bottom: 2px solid #e5e7eb; }
+        .tab { padding: .5rem 1rem; border: none; background: none; cursor: pointer; font-size: 1rem; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+        .tab.activa { border-bottom-color: #2563eb; color: #2563eb; font-weight: 600; }
+        .panel { display: none; padding: 1rem 0; }
+        .panel.activo { display: block; }
+    </style>
+</head>
+<body>
+    <h1>Pestañas (tabs)</h1>
+    <p class="intro">Mostrar u ocultar secciones según la pestaña elegida, usando clases y el atributo <code>data-*</code> para enlazar botón y panel.</p>
+
+    <div class="tabs">
+        <button class="tab activa" data-panel="uno">Inicio</button>
+        <button class="tab" data-panel="dos">Perfil</button>
+        <button class="tab" data-panel="tres">Contacto</button>
+    </div>
+
+    <div class="panel activo" id="uno">Bienvenido a la pestaña de <strong>Inicio</strong>.</div>
+    <div class="panel" id="dos">Aquí iría la información del <strong>Perfil</strong>.</div>
+    <div class="panel" id="tres">Escríbenos desde <strong>Contacto</strong>.</div>
+
+    <script>
+        const tabs = document.querySelectorAll(".tab");
+        const paneles = document.querySelectorAll(".panel");
+
+        tabs.forEach(tab => {
+            tab.addEventListener("click", () => {
+                // desactivar todo
+                tabs.forEach(t => t.classList.remove("activa"));
+                paneles.forEach(p => p.classList.remove("activo"));
+
+                // activar el seleccionado y su panel
+                tab.classList.add("activa");
+                document.getElementById(tab.dataset.panel).classList.add("activo");
+            });
+        });
+    </script>
+</body>
+</html>

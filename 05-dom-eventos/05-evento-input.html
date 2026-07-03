@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evento input</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #222; }
+        h1 { font-size: 1.3rem; }
+        p.intro { color: #555; }
+        input { font-size: 1rem; padding: .5rem; width: 100%; box-sizing: border-box; }
+        #eco { margin-top: 1rem; font-size: 1.2rem; }
+        #contador { color: #555; }
+    </style>
+</head>
+<body>
+    <h1>Evento input: en vivo</h1>
+    <p class="intro">El evento <code>input</code> se dispara con cada tecla mientras escribes. Aquí reflejamos el texto y contamos caracteres al instante.</p>
+    <input type="text" id="campo" placeholder="Escribe algo..." autofocus>
+    <div id="eco"></div>
+    <div id="contador">0 caracteres</div>
+
+    <script>
+        const campo = document.querySelector("#campo");
+        const eco = document.querySelector("#eco");
+        const contador = document.querySelector("#contador");
+
+        campo.addEventListener("input", (evento) => {
+            const texto = evento.target.value;
+            eco.textContent = texto;
+            contador.textContent = `${texto.length} caracteres`;
+        });
+    </script>
+</body>
+</html>

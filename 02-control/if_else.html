@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>if / else</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #222; }
+        h1 { font-size: 1.3rem; }
+        p.intro { color: #555; }
+        pre { background: #f4f4f4; padding: .75rem 1rem; border-radius: 6px; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <h1>if / else if / else</h1>
+    <p class="intro">Ejecuta un bloque u otro según una condición. Aquí saludamos según la hora actual de tu equipo.</p>
+    <pre id="salida"></pre>
+    <script>
+        const hora = new Date().getHours();
+        let saludo;
+
+        if (hora < 12) {
+            saludo = "Buenos días";
+        } else if (hora < 20) {
+            saludo = "Buenas tardes";
+        } else {
+            saludo = "Buenas noches";
+        }
+
+        document.getElementById("salida").textContent =
+            `Son las ${hora} h -> ${saludo}`;
+    </script>
+</body>
+</html>

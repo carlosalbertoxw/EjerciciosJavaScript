@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reloj digital</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #222; text-align: center; }
+        h1 { font-size: 1.3rem; }
+        p.intro { color: #555; }
+        #reloj { font-size: 3.5rem; font-variant-numeric: tabular-nums; font-weight: 700; margin: 1rem 0; }
+        #fecha { color: #555; text-transform: capitalize; }
+    </style>
+</head>
+<body>
+    <h1>Reloj digital en vivo</h1>
+    <p class="intro">Combina el objeto <code>Date</code> con <code>setInterval</code> para actualizar la hora cada segundo.</p>
+
+    <div id="reloj">--:--:--</div>
+    <div id="fecha"></div>
+
+    <script>
+        const reloj = document.querySelector("#reloj");
+        const fecha = document.querySelector("#fecha");
+
+        function actualizar() {
+            const ahora = new Date();
+            // padStart asegura dos dígitos (ej: 09 en vez de 9)
+            const h = String(ahora.getHours()).padStart(2, "0");
+            const m = String(ahora.getMinutes()).padStart(2, "0");
+            const s = String(ahora.getSeconds()).padStart(2, "0");
+            reloj.textContent = `${h}:${m}:${s}`;
+
+            fecha.textContent = ahora.toLocaleDateString("es-ES", {
+                weekday: "long", day: "numeric", month: "long", year: "numeric"
+            });
+        }
+
+        actualizar();
+        setInterval(actualizar, 1000);
+    </script>
+</body>
+</html>

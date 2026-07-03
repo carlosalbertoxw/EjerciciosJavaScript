@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Objetos</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #222; }
+        h1 { font-size: 1.3rem; }
+        p.intro { color: #555; }
+        pre { background: #f4f4f4; padding: .75rem 1rem; border-radius: 6px; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <h1>Objetos</h1>
+    <p class="intro">Un objeto agrupa datos relacionados como pares <code>clave: valor</code>. Se accede con punto o con corchetes.</p>
+    <pre id="salida"></pre>
+    <script>
+        const persona = {
+            nombre: "Ana",
+            edad: 28,
+            ciudad: "Lima"
+        };
+
+        // Leer y modificar propiedades
+        persona.edad = 29;          // cambia una existente
+        persona.profesion = "ingeniera"; // agrega una nueva
+
+        const salida = document.getElementById("salida");
+        salida.textContent =
+            `persona.nombre       -> ${persona.nombre}\n` +
+            `persona["ciudad"]    -> ${persona["ciudad"]}\n` +
+            `edad modificada      -> ${persona.edad}\n` +
+            `Object.keys()        -> ${JSON.stringify(Object.keys(persona))}\n` +
+            `Object.values()      -> ${JSON.stringify(Object.values(persona))}\n\n` +
+            `Objeto completo:\n${JSON.stringify(persona, null, 2)}`;
+    </script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 360px; margin: 2rem auto; padding: 0 1rem; color: #222; }
+        h1 { font-size: 1.3rem; }
+        p.intro { color: #555; }
+        #pantalla { width: 100%; box-sizing: border-box; font-size: 2rem; text-align: right; padding: .5rem; margin-bottom: .5rem; border: 1px solid #ccc; border-radius: 6px; }
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; }
+        button { font-size: 1.25rem; padding: 1rem 0; border: none; border-radius: 6px; background: #e5e7eb; cursor: pointer; }
+        button.op { background: #2563eb; color: #fff; }
+        button.igual { background: #16a34a; color: #fff; grid-column: span 2; }
+        button.limpiar { background: #b91c1c; color: #fff; }
+    </style>
+</head>
+<body>
+    <h1>Calculadora</h1>
+    <p class="intro">Combina eventos de botones con lógica. Cada botón añade su símbolo a la pantalla; "=" evalúa la operación.</p>
+
+    <input type="text" id="pantalla" readonly>
+    <div class="grid">
+        <button class="limpiar" data-accion="limpiar">C</button>
+        <button data-valor="(">(</button>
+        <button data-valor=")">)</button>
+        <button class="op" data-valor="/">÷</button>
+
+        <button data-valor="7">7</button>
+        <button data-valor="8">8</button>
+        <button data-valor="9">9</button>
+        <button class="op" data-valor="*">×</button>
+
+        <button data-valor="4">4</button>
+        <button data-valor="5">5</button>
+        <button data-valor="6">6</button>
+        <button class="op" data-valor="-">−</button>
+
+        <button data-valor="1">1</button>
+        <button data-valor="2">2</button>
+        <button data-valor="3">3</button>
+        <button class="op" data-valor="+">+</button>
+
+        <button data-valor="0">0</button>
+        <button data-valor=".">.</button>
+        <button class="igual" data-accion="igual">=</button>
+    </div>
+
+    <script>
+        const pantalla = document.querySelector("#pantalla");
+
+        // Un solo listener para todos los botones (delegación de eventos)
+        document.querySelector(".grid").addEventListener("click", (evento) => {
+            const boton = evento.target;
+            const { valor, accion } = boton.dataset;
+
+            if (accion === "limpiar") {
+                pantalla.value = "";
+            } else if (accion === "igual") {
+                try {
+                    // Function evalúa la expresión de forma más acotada que eval()
+                    pantalla.value = Function(`"use strict"; return (${pantalla.value})`)();
+                } catch {
+                    pantalla.value = "Error";
+                }
+            } else if (valor !== undefined) {
+                pantalla.value += valor;
+            }
+        });
+    </script>
+</body>
+</html>

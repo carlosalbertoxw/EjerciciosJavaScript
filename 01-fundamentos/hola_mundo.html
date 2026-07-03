@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hola Mundo</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #222; }
+        h1 { font-size: 1.3rem; }
+        p.intro { color: #555; }
+        #salida { font-size: 1.5rem; }
+    </style>
+</head>
+<body>
+    <h1>Hola Mundo</h1>
+    <p class="intro">El primer programa de todo lenguaje: mostrar un mensaje en pantalla. Abre también la consola del navegador (F12) para ver el segundo mensaje.</p>
+    <div id="salida"></div>
+    <script>
+        // Escribir dentro de un elemento de la página
+        document.getElementById("salida").textContent = "¡Hola Mundo!";
+
+        // Escribir en la consola del navegador (herramienta clave para aprender)
+        console.log("¡Hola Mundo desde la consola!");
+    </script>
+</body>
+</html>
