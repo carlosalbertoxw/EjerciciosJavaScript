@@ -30,8 +30,9 @@
         function mover(dx, dy) {
             ctx.beginPath();
             ctx.moveTo(x, y);
-            x += dx;
-            y += dy;
+            // Math.min y Math.max impiden que el lápiz salga del canvas
+            x = Math.max(0, Math.min(canvas.width, x + dx));
+            y = Math.max(0, Math.min(canvas.height, y + dy));
             ctx.lineTo(x, y);
             ctx.stroke();
         }

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ámbito (scope)</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #222; }
+        h1 { font-size: 1.3rem; }
+        p.intro { color: #555; }
+        pre { background: #f4f4f4; padding: .75rem 1rem; border-radius: 6px; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <h1>Ámbito (scope) de las variables</h1>
+    <p class="intro">El scope decide dónde "existe" una variable. Una variable declarada dentro de una función o de un bloque <code>{ }</code> solo vive ahí. Una función interna recuerda las variables de la función que la creó: eso es un <em>closure</em>.</p>
+    <pre id="salida"></pre>
+    <script>
+        const global = "soy global"; // visible en todo el archivo
+
+        function ejemplo() {
+            const local = "soy local"; // solo existe aquí dentro
+            return `Dentro de la función veo: ${global} y ${local}`;
+        }
+
+        let mensajeError;
+        try {
+            // Intentar leer 'local' fuera de la función da error
+            console.log(local);
+        } catch (e) {
+            mensajeError = e.message;
+        }
+
+        // Ámbito de bloque: let y const solo existen dentro de sus llaves
+        let resultadoBloque;
+        {
+            const enBloque = "soy de bloque";
+            resultadoBloque = enBloque;
+        }
+        const existeFuera = typeof enBloque !== "undefined";
+
+        // Closure: incrementar sigue viendo 'cuenta' aunque crearContador ya terminó
+        function crearContador() {
+            let cuenta = 0;
+            return function incrementar() {
+                cuenta++;
+                return cuenta;
+            };
+        }
+        const contadorA = crearContador();
+        const contadorB = crearContador(); // cada uno tiene su propia 'cuenta'
+        contadorA();
+        contadorA();
+
+        const salida = document.getElementById("salida");
+        salida.textContent =
+            `${ejemplo()}\n\n` +
+            `Fuera de la función, 'local' no existe:\n-> ${mensajeError}\n\n` +
+            `Dentro del bloque: ${resultadoBloque}. ¿Existe fuera? ${existeFuera}\n\n` +
+            `Closure: contadorA llamado 3 veces -> ${contadorA()}\n` +
+            `Closure: contadorB llamado 1 vez   -> ${contadorB()}`;
+    </script>
+</body>
+</html>

@@ -8,15 +8,42 @@
         body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #222; }
         h1 { font-size: 1.3rem; }
         p.intro { color: #555; }
-        pre { background: #f4f4f4; padding: .75rem 1rem; border-radius: 6px; white-space: pre-wrap; }
+        label { display: block; margin-top: .75rem; font-weight: 600; }
+        input { font-size: 1rem; padding: .5rem; width: 100%; box-sizing: border-box; }
+        button { font-size: 1rem; padding: .5rem 1rem; margin-top: 1rem; border: none; border-radius: 6px; background: #2563eb; color: #fff; cursor: pointer; }
+        small { display: block; min-height: 1.4em; }
         .ok { color: #16a34a; }
         .error { color: #b91c1c; }
     </style>
 </head>
 <body>
-    <h1>Validar campos con expresiones regulares</h1>
-    <p class="intro">Cada tipo de dato (email, número, URL…) tiene un patrón. La función devuelve un mensaje vacío si es válido, o el error correspondiente.</p>
-    <pre id="salida"></pre>
+    <h1>Validar campos de un formulario</h1>
+    <p class="intro">Mientras escribes, cada campo se comprueba con una expresión regular. Al enviar, <code>checkValidity()</code> usa además la validación del navegador (<code>required</code>, <code>type="email"</code>...). En una aplicación real, el servidor debe volver a validar: lo que corre en el navegador se puede saltar.</p>
+
+    <form id="formulario" novalidate>
+        <label for="usuario">Usuario (letras, números y guiones)</label>
+        <input id="usuario" data-tipo="usuario" maxlength="25" required>
+        <small></small>
+
+        <label for="edad">Edad</label>
+        <input id="edad" data-tipo="numerico" inputmode="numeric" required>
+        <small></small>
+
+        <label for="precio">Precio</label>
+        <input id="precio" data-tipo="decimal" inputmode="decimal" required>
+        <small></small>
+
+        <label for="sitio">Sitio web</label>
+        <input id="sitio" data-tipo="url" type="url" required>
+        <small></small>
+
+        <label for="correo">Correo</label>
+        <input id="correo" data-tipo="email" type="email" required>
+        <small></small>
+
+        <button type="submit">Enviar</button>
+        <small id="resultado"></small>
+    </form>
 
     <script>
         // Patrones por tipo de dato
@@ -24,35 +51,40 @@
             usuario: /^[0-9a-zA-Z-]+$/,
             numerico: /^[0-9]+$/,
             decimal: /^[0-9]+(\.[0-9]+)?$/,
-            url: /^(http|https):\/\/[a-zA-Z0-9\-.]+\.[a-zA-Z]{2,}(\/\S*)?$/,
+            url: /^https?:\/\/[a-zA-Z0-9\-.]+\.[a-zA-Z]{2,}(\/\S*)?$/,
             email: /^[^@\s]+@[^@\s.]+(\.[^@\s.]+)+$/
         };
 
         // Devuelve "" si es válido, o un mensaje de error
-        function validar(texto, tipo, longitudMax) {
-            if (!patrones[tipo]) return `Tipo desconocido: ${tipo}`;
+        function validar(texto, tipo) {
+            if (texto === "") return "Este campo es obligatorio";
             if (!patrones[tipo].test(texto)) return `Formato inválido para "${tipo}"`;
-            if (texto.length > longitudMax) return `Máximo ${longitudMax} caracteres`;
-            return ""; // válido
+            return "";
         }
 
-        // Casos de prueba: [valor, tipo, longitud]
-        const casos = [
-            ["carlos-123", "usuario", 25],
-            ["24680", "numerico", 10],
-            ["24680.2", "decimal", 10],
-            ["https://github.com/carlosalbertoxw", "url", 500],
-            ["prueba@correo.com", "email", 50],
-            ["correo-malo", "email", 50]
-        ];
+        // Muestra el resultado en el <small> que sigue al campo y devuelve si es válido
+        function comprobar(campo) {
+            const error = validar(campo.value.trim(), campo.dataset.tipo);
+            const mensaje = campo.nextElementSibling;
+            mensaje.textContent = error === "" ? "Correcto" : error;
+            mensaje.className = error === "" ? "ok" : "error";
+            return error === "";
+        }
 
-        const lineas = casos.map(([valor, tipo, longitud]) => {
-            const error = validar(valor, tipo, longitud);
-            const estado = error === "" ? "OK - válido" : `ERROR - ${error}`;
-            return `${tipo.padEnd(9)} "${valor}"\n   -> ${estado}`;
+        const formulario = document.querySelector("#formulario");
+        const campos = formulario.querySelectorAll("input");
+        const resultado = document.querySelector("#resultado");
+
+        campos.forEach(campo => campo.addEventListener("input", () => comprobar(campo)));
+
+        formulario.addEventListener("submit", (evento) => {
+            evento.preventDefault();
+            // Se comprueban todos, para mostrar todos los errores de una vez
+            const validos = [...campos].map(comprobar).every(Boolean);
+            const correcto = validos && formulario.checkValidity();
+            resultado.textContent = correcto ? "Formulario válido" : "Revisa los campos marcados";
+            resultado.className = correcto ? "ok" : "error";
         });
-
-        document.getElementById("salida").textContent = lineas.join("\n");
     </script>
 </body>
 </html>

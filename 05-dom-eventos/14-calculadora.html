@@ -13,60 +13,107 @@
         button { font-size: 1.25rem; padding: 1rem 0; border: none; border-radius: 6px; background: #e5e7eb; cursor: pointer; }
         button.op { background: #2563eb; color: #fff; }
         button.igual { background: #16a34a; color: #fff; grid-column: span 2; }
-        button.limpiar { background: #b91c1c; color: #fff; }
+        button.limpiar { background: #b91c1c; color: #fff; grid-column: span 3; }
     </style>
 </head>
 <body>
     <h1>Calculadora</h1>
-    <p class="intro">Combina eventos de botones con lógica. Cada botón añade su símbolo a la pantalla; "=" evalúa la operación.</p>
+    <p class="intro">Combina eventos de botones con un poco de estado: el primer número, la operación elegida y si el siguiente dígito empieza un número nuevo. Cada operación es una función guardada en un objeto.</p>
 
-    <input type="text" id="pantalla" readonly>
+    <input type="text" id="pantalla" value="0" readonly>
     <div class="grid">
         <button class="limpiar" data-accion="limpiar">C</button>
-        <button data-valor="(">(</button>
-        <button data-valor=")">)</button>
-        <button class="op" data-valor="/">÷</button>
+        <button class="op" data-operador="/">÷</button>
 
-        <button data-valor="7">7</button>
-        <button data-valor="8">8</button>
-        <button data-valor="9">9</button>
-        <button class="op" data-valor="*">×</button>
+        <button data-digito="7">7</button>
+        <button data-digito="8">8</button>
+        <button data-digito="9">9</button>
+        <button class="op" data-operador="*">×</button>
 
-        <button data-valor="4">4</button>
-        <button data-valor="5">5</button>
-        <button data-valor="6">6</button>
-        <button class="op" data-valor="-">−</button>
+        <button data-digito="4">4</button>
+        <button data-digito="5">5</button>
+        <button data-digito="6">6</button>
+        <button class="op" data-operador="-">−</button>
 
-        <button data-valor="1">1</button>
-        <button data-valor="2">2</button>
-        <button data-valor="3">3</button>
-        <button class="op" data-valor="+">+</button>
+        <button data-digito="1">1</button>
+        <button data-digito="2">2</button>
+        <button data-digito="3">3</button>
+        <button class="op" data-operador="+">+</button>
 
-        <button data-valor="0">0</button>
-        <button data-valor=".">.</button>
+        <button data-digito="0">0</button>
+        <button data-digito=".">.</button>
         <button class="igual" data-accion="igual">=</button>
     </div>
 
     <script>
         const pantalla = document.querySelector("#pantalla");
 
+        // Cada operación es una función; así no hace falta evaluar texto como código
+        const operaciones = {
+            "+": (a, b) => a + b,
+            "-": (a, b) => a - b,
+            "*": (a, b) => a * b,
+            "/": (a, b) => a / b
+        };
+
+        let primerNumero = null;
+        let operadorPendiente = null;
+        let empezarNumero = true; // el próximo dígito reemplaza lo que hay en pantalla
+
+        function limpiar() {
+            pantalla.value = "0";
+            primerNumero = null;
+            operadorPendiente = null;
+            empezarNumero = true;
+        }
+
+        function escribirDigito(digito) {
+            if (empezarNumero) {
+                pantalla.value = digito === "." ? "0." : digito;
+                empezarNumero = false;
+            } else if (digito === "." && pantalla.value.includes(".")) {
+                return; // un número solo puede tener un punto
+            } else if (pantalla.value === "0" && digito !== ".") {
+                pantalla.value = digito; // evita ceros a la izquierda
+            } else {
+                pantalla.value += digito;
+            }
+        }
+
+        // Resuelve la operación pendiente, si la hay
+        function calcular() {
+            if (operadorPendiente === null || empezarNumero) return;
+
+            const segundoNumero = Number(pantalla.value);
+            if (operadorPendiente === "/" && segundoNumero === 0) {
+                limpiar();
+                pantalla.value = "Error";
+                return;
+            }
+
+            const resultado = operaciones[operadorPendiente](primerNumero, segundoNumero);
+            // Los decimales no son exactos (0.1 + 0.2 = 0.30000000000000004): redondeamos
+            pantalla.value = Number(resultado.toPrecision(12));
+            operadorPendiente = null;
+            empezarNumero = true;
+        }
+
+        function elegirOperador(operador) {
+            calcular();
+            if (pantalla.value === "Error") return;
+            primerNumero = Number(pantalla.value);
+            operadorPendiente = operador;
+            empezarNumero = true;
+        }
+
         // Un solo listener para todos los botones (delegación de eventos)
         document.querySelector(".grid").addEventListener("click", (evento) => {
-            const boton = evento.target;
-            const { valor, accion } = boton.dataset;
+            const { digito, operador, accion } = evento.target.dataset;
 
-            if (accion === "limpiar") {
-                pantalla.value = "";
-            } else if (accion === "igual") {
-                try {
-                    // Function evalúa la expresión de forma más acotada que eval()
-                    pantalla.value = Function(`"use strict"; return (${pantalla.value})`)();
-                } catch {
-                    pantalla.value = "Error";
-                }
-            } else if (valor !== undefined) {
-                pantalla.value += valor;
-            }
+            if (digito !== undefined) escribirDigito(digito);
+            else if (operador !== undefined) elegirOperador(operador);
+            else if (accion === "igual") calcular();
+            else if (accion === "limpiar") limpiar();
         });
     </script>
 </body>

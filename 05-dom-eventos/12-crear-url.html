@@ -25,7 +25,7 @@
         function crearSlug(texto) {
             return texto
                 .normalize("NFD")                    // separa cada letra de su acento
-                .replace(/[̀-ͯ]/g, "")     // elimina los acentos (marcas combinantes)
+                .replace(/\p{M}/gu, "")               // elimina los acentos (marcas combinantes)
                 .toLowerCase()
                 .trim()
                 .replace(/[^a-z0-9]+/g, "-")         // todo lo no alfanumérico -> guion

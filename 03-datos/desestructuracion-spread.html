@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desestructuración y spread</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #222; }
+        h1 { font-size: 1.3rem; }
+        p.intro { color: #555; }
+        pre { background: #f4f4f4; padding: .75rem 1rem; border-radius: 6px; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <h1>Desestructuración y spread</h1>
+    <p class="intro">La desestructuración saca valores de un array u objeto en una sola línea. Los tres puntos <code>...</code> expanden un array u objeto (spread) o reúnen lo que sobra (rest).</p>
+    <pre id="salida"></pre>
+    <script>
+        // Desestructurar un array: por posición
+        const colores = ["rojo", "verde", "azul", "negro"];
+        const [primero, segundo, ...resto] = colores;
+
+        // Desestructurar un objeto: por nombre, con renombrado y valor por defecto
+        const persona = { nombre: "Ana", edad: 28 };
+        const { nombre, edad: anios, ciudad = "Desconocida" } = persona;
+
+        // Spread: copiar y combinar sin modificar los originales
+        const masColores = [...colores, "blanco"];
+        const personaMayor = { ...persona, edad: 29 };
+
+        // Rest en parámetros: recibe cualquier cantidad de argumentos en un array
+        const sumar = (...numeros) => numeros.reduce((total, n) => total + n, 0);
+
+        // También sirve en los parámetros de una función
+        const saludar = ({ nombre }) => `Hola, ${nombre}`;
+
+        document.getElementById("salida").textContent =
+            `primero, segundo    -> ${primero}, ${segundo}\n` +
+            `resto               -> ${JSON.stringify(resto)}\n\n` +
+            `nombre              -> ${nombre}\n` +
+            `edad renombrada     -> ${anios}\n` +
+            `ciudad por defecto  -> ${ciudad}\n\n` +
+            `[...colores, x]     -> ${JSON.stringify(masColores)}\n` +
+            `{ ...persona, edad } -> ${JSON.stringify(personaMayor)}\n` +
+            `persona no cambió   -> ${JSON.stringify(persona)}\n\n` +
+            `sumar(1, 2, 3)      -> ${sumar(1, 2, 3)}\n` +
+            `saludar(persona)    -> ${saludar(persona)}`;
+    </script>
+</body>
+</html>

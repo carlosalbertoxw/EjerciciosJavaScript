@@ -9,7 +9,7 @@
         h1 { font-size: 1.3rem; }
         p.intro { color: #555; }
         #reloj { font-size: 3.5rem; font-variant-numeric: tabular-nums; font-weight: 700; margin: 1rem 0; }
-        #fecha { color: #555; text-transform: capitalize; }
+        #fecha { color: #555; }
     </style>
 </head>
 <body>
@@ -31,9 +31,11 @@
             const s = String(ahora.getSeconds()).padStart(2, "0");
             reloj.textContent = `${h}:${m}:${s}`;
 
-            fecha.textContent = ahora.toLocaleDateString("es-ES", {
+            const texto = ahora.toLocaleDateString("es-ES", {
                 weekday: "long", day: "numeric", month: "long", year: "numeric"
             });
+            // Solo la primera letra en mayúscula: "Jueves, 5 de noviembre de 2026"
+            fecha.textContent = texto.charAt(0).toUpperCase() + texto.slice(1);
         }
 
         actualizar();

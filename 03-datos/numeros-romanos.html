@@ -42,7 +42,8 @@
 
         const resultado = document.getElementById("resultado");
         document.getElementById("convertir").addEventListener("click", () => {
-            const numero = parseInt(document.getElementById("decimal").value, 10);
+            // Number convierte todo el texto: "3.7" sigue siendo 3.7 y no pasa la validación
+            const numero = Number(document.getElementById("decimal").value);
             if (Number.isInteger(numero) && numero >= 1 && numero <= 3999) {
                 resultado.textContent = decimalARomano(numero);
             } else {

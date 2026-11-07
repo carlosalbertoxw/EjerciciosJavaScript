@@ -22,7 +22,7 @@
     <script>
         const menores = ["de", "la", "los", "el", "del", "y", "e", "para", "sin", "las"];
 
-        const capitalizar = palabra => palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase();
+        const capitalizar = palabra => palabra.charAt(0).toUpperCase() + palabra.slice(1);
 
         function formatearTitulo(texto) {
             const palabras = texto.trim().toLowerCase().split(/\s+/);

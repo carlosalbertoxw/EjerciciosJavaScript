@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herencia</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #222; }
+        h1 { font-size: 1.3rem; }
+        p.intro { color: #555; }
+        pre { background: #f4f4f4; padding: .75rem 1rem; border-radius: 6px; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <h1>Herencia con extends</h1>
+    <p class="intro">Con <code>extends</code> una clase hereda los métodos de otra y puede redefinirlos. <code>super</code> llama al constructor o a los métodos de la clase padre. Así, objetos distintos responden a su manera a un mismo método: eso es el polimorfismo.</p>
+    <pre id="salida"></pre>
+    <script>
+        class Animal {
+            constructor(nombre) {
+                this.nombre = nombre;
+            }
+
+            hacerSonido() {
+                return "...";
+            }
+
+            presentarse() {
+                return `${this.nombre} dice: ${this.hacerSonido()}`;
+            }
+        }
+
+        class Perro extends Animal {
+            hacerSonido() {
+                return "¡Guau!";
+            }
+        }
+
+        class Gato extends Animal {
+            constructor(nombre, vidas) {
+                super(nombre); // obligatorio antes de usar this
+                this.vidas = vidas;
+            }
+
+            hacerSonido() {
+                return "¡Miau!";
+            }
+
+            presentarse() {
+                return `${super.presentarse()} (le quedan ${this.vidas} vidas)`;
+            }
+        }
+
+        const animales = [new Perro("Firulais"), new Gato("Michi", 7), new Animal("Criatura")];
+
+        document.getElementById("salida").textContent =
+            animales.map(animal => animal.presentarse()).join("\n") +
+            `\n\nMichi es Gato: ${animales[1] instanceof Gato}` +
+            `\nMichi es Animal: ${animales[1] instanceof Animal}`;
+    </script>
+</body>
+</html>

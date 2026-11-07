@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clases</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #222; }
+        h1 { font-size: 1.3rem; }
+        p.intro { color: #555; }
+        pre { background: #f4f4f4; padding: .75rem 1rem; border-radius: 6px; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <h1>Clases</h1>
+    <p class="intro">Una <code>class</code> es un molde para crear objetos con los mismos datos y métodos. Lo que empieza con <code>#</code> es privado: solo se puede usar dentro de la clase.</p>
+    <pre id="salida"></pre>
+    <script>
+        class CuentaBancaria {
+            #saldo = 0; // campo privado: solo la clase puede tocarlo
+
+            // constructor: se ejecuta al crear el objeto con new
+            constructor(titular, saldoInicial) {
+                this.titular = titular;
+                this.#saldo = saldoInicial;
+            }
+
+            depositar(monto) {
+                if (monto <= 0) throw new Error("El monto debe ser positivo");
+                this.#saldo += monto;
+            }
+
+            retirar(monto) {
+                if (monto > this.#saldo) throw new Error("Saldo insuficiente");
+                this.#saldo -= monto;
+            }
+
+            // get: se lee como una propiedad, sin paréntesis
+            get saldo() {
+                return this.#saldo;
+            }
+
+            // static: pertenece a la clase, no a cada objeto
+            static abrirVacia(titular) {
+                return new CuentaBancaria(titular, 0);
+            }
+        }
+
+        const cuenta = new CuentaBancaria("Ana", 100);
+        cuenta.depositar(50);
+
+        let error;
+        try {
+            cuenta.retirar(500);
+        } catch (e) {
+            error = e.message;
+        }
+
+        // Cada objeto tiene sus propios datos
+        const otra = CuentaBancaria.abrirVacia("Luis");
+
+        document.getElementById("salida").textContent =
+            `cuenta.titular      -> ${cuenta.titular}\n` +
+            `cuenta.saldo        -> ${cuenta.saldo}\n` +
+            `retirar(500)        -> ${error}\n` +
+            `otra.saldo          -> ${otra.saldo}\n` +
+            `es CuentaBancaria   -> ${cuenta instanceof CuentaBancaria}\n` +
+            `cuenta.saldo = 999 no tiene efecto: solo definimos get`;
+    </script>
+</body>
+</html>

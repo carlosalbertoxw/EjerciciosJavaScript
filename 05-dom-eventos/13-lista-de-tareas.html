@@ -20,7 +20,7 @@
 </head>
 <body>
     <h1>Lista de tareas (to-do)</h1>
-    <p class="intro">Proyecto que integra varios conceptos: crear elementos, eventos y arrays. Agrega tareas, márcalas como hechas o bórralas.</p>
+    <p class="intro">Proyecto que integra varios conceptos: crear elementos, eventos y formularios. Agrega tareas, márcalas como hechas o bórralas.</p>
 
     <form id="formulario">
         <input type="text" id="nueva" placeholder="Nueva tarea..." required autofocus>
@@ -52,9 +52,11 @@
 
         formulario.addEventListener("submit", (evento) => {
             evento.preventDefault();
-            lista.append(crearTarea(entrada.value.trim()));
+            const texto = entrada.value.trim();
             entrada.value = "";
             entrada.focus();
+            if (texto === "") return; // required acepta espacios: los descartamos aquí
+            lista.append(crearTarea(texto));
         });
     </script>
 </body>

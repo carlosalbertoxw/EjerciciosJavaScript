@@ -13,7 +13,7 @@
 </head>
 <body>
     <h1>Previsualizar una imagen antes de subirla</h1>
-    <p class="intro">Con <code>FileReader</code> leemos el archivo que elige el usuario y lo mostramos sin enviarlo a ningún servidor.</p>
+    <p class="intro">Con <code>URL.createObjectURL</code> creamos una dirección temporal para el archivo que elige el usuario y lo mostramos sin enviarlo a ningún servidor.</p>
 
     <input type="file" id="archivo" accept="image/*">
     <img id="preview" alt="Aquí aparecerá tu imagen">
@@ -26,11 +26,11 @@
             const imagen = archivo.files[0];
             if (!imagen) return;
 
-            const lector = new FileReader();
-            lector.addEventListener("load", (evento) => {
-                preview.src = evento.target.result; // el resultado es la imagen en base64
-            });
-            lector.readAsDataURL(imagen);
+            // Dirección temporal que apunta al archivo, sin leerlo completo en memoria
+            const direccion = URL.createObjectURL(imagen);
+            preview.src = direccion;
+            // Cuando la imagen termina de cargar, liberamos esa dirección
+            preview.addEventListener("load", () => URL.revokeObjectURL(direccion), { once: true });
         });
     </script>
 </body>

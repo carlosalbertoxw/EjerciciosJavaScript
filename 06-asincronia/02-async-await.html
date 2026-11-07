@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>async / await</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #222; }
+        h1 { font-size: 1.3rem; }
+        p.intro { color: #555; }
+        button { font-size: 1rem; padding: .5rem 1rem; border: none; border-radius: 6px; background: #2563eb; color: #fff; cursor: pointer; }
+        pre { background: #f4f4f4; padding: .75rem 1rem; border-radius: 6px; white-space: pre-wrap; min-height: 3em; }
+    </style>
+</head>
+<body>
+    <h1>async / await</h1>
+    <p class="intro"><code>await</code> espera una promesa y permite escribir código asíncrono como si fuera secuencial; los errores se capturan con <code>try/catch</code>. Compara cuánto tarda esperar una por una frente a <code>Promise.all</code>, que las espera a la vez.</p>
+    <button id="iniciar">Iniciar</button>
+    <pre id="salida"></pre>
+    <script>
+        const salida = document.querySelector("#salida");
+        const registrar = texto => salida.textContent += `${texto}\n`;
+
+        // Devuelve una promesa que se cumple después de 'ms' milisegundos
+        const esperar = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+        async function descargar(nombre) {
+            await esperar(500);
+            return `${nombre} listo`;
+        }
+
+        async function fallar() {
+            await esperar(200);
+            throw new Error("no se pudo descargar");
+        }
+
+        // Una función async siempre devuelve una promesa
+        async function iniciar() {
+            salida.textContent = "";
+
+            // Una tras otra: cada await espera a que termine la anterior
+            let inicio = performance.now();
+            registrar(await descargar("A"));
+            registrar(await descargar("B"));
+            registrar(`Secuencial: ${Math.round(performance.now() - inicio)} ms\n`);
+
+            // A la vez: todas empiezan juntas y se espera a que terminen todas
+            inicio = performance.now();
+            const resultados = await Promise.all([descargar("C"), descargar("D")]);
+            registrar(resultados.join(", "));
+            registrar(`Promise.all: ${Math.round(performance.now() - inicio)} ms\n`);
+
+            // try/catch atrapa el rechazo de la promesa
+            try {
+                await fallar();
+            } catch (error) {
+                registrar(`Error capturado: ${error.message}`);
+            }
+        }
+
+        document.querySelector("#iniciar").addEventListener("click", iniciar);
+    </script>
+</body>
+</html>
